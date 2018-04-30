@@ -1,6 +1,6 @@
 class ImageEditor {
     constructor(opt = {}) {
-        this.src = opt.imageSrc || 'http://dvlp.work/canvas-drug/girl.jpg'
+        this.src = opt.imageSrc || dataUrl
         this.id = opt.canvasId || 'image-for-edit'
         this.size = opt.canvasSize || 128
         this.scaleStep = opt.scaleStep || 0.25
@@ -107,8 +107,34 @@ class ImageEditor {
     }
 }
 
-const imageEditor = new ImageEditor({
-    imageSrc: 'http://dvlp.work/canvas-drug/girl.jpg',
-    canvasSize: 500
-  });
-  imageEditor.insertTo(document.getElementById('image'));
+let obj1 = document.getElementById("imgfile")
+obj1.addEventListener("change", function(evt) {
+    let file = evt.target.files
+    let reader = new FileReader()
+    reader.readAsDataURL(file[0])
+    reader.onload = function() {
+        let dataUrl = reader.result
+
+        const imageEditor = new ImageEditor({
+            imageSrc: dataUrl,
+            canvasSize: 500
+        });
+        imageEditor.insertTo(document.getElementById('image'))
+        cvs = document.getElementById("image-for-edit")
+        console.log(cvs)
+        let chgImg = function changeImage() {
+            let png = cvs.toDataURL()
+            document.getElementById("newImg").src = png
+        }
+        document.getElementById("changeImg").onclick=chgImg
+    }
+}, false)
+
+
+
+
+
+function chgImg() {
+    let png = cvs.toDataURL()
+    document.getElementById("newImg").src = png
+}
