@@ -44,15 +44,10 @@ class ImageEditor {
             [...el.children].forEach(a => a.remove())
             alert('画像読み込み失敗')
         }
-
+        event.preventDefault()
         this.canvas.addEventListener('mousedown', this.dragStart.bind(this))
         this.canvas.addEventListener('mousemove', this.drag.bind(this))
         this.canvas.addEventListener('mouseup', this.dragEnd.bind(this))
-        
-        this.canvas.addEventListener('touchstart', this.touchStart.bind(this))
-        this.canvas.addEventListener('touchmove', this.touch.bind(this))
-        this.canvas.addEventListener('touchend', this.touchEnd.bind(this))
-
 
         el.appendChild(this.canvas)
     }
@@ -87,7 +82,6 @@ class ImageEditor {
 
     drag(event) {
         if (this.dragInfo.isDragging) {
-            //alert( "X>>" + this.dragInfo.startX + "  Y >>" + this.dragInfo.startY);
             this.dragInfo.diffX = this.dragInfo.canvasX + (event.clientX - this.dragInfo.startX) / this.scale;
             this.dragInfo.diffY = this.dragInfo.canvasY + (event.clientY - this.dragInfo.startY) / this.scale;
             this._redraw();
@@ -95,27 +89,6 @@ class ImageEditor {
     }
 
     dragEnd(event) {
-        this.dragInfo.isDragging = false
-        this.dragInfo.canvasX = this.dragInfo.diffX
-        this.dragInfo.canvasY = this.dragInfo.diffY
-    }
-    
-    touchStart(event) {
-        this.dragInfo.isDragging = true
-        event.preventDefault();
-        this.dragInfo.startX = event.targetTouches[0].clientX
-        this.dragInfo.startY = event.targetTouches[0].clientY
-    }
-
-    touch(event) {
-        if (this.dragInfo.isDragging) {
-            this.dragInfo.diffX = this.dragInfo.canvasX + (event.targetTouches[0].clientX - this.dragInfo.startX) / this.scale;
-            this.dragInfo.diffY = this.dragInfo.canvasY + (event.targetTouches[0].clientY - this.dragInfo.startY) / this.scale;
-            this._redraw();
-        }
-    }
-
-    touchEnd(event) {
         this.dragInfo.isDragging = false
         this.dragInfo.canvasX = this.dragInfo.diffX
         this.dragInfo.canvasY = this.dragInfo.diffY
